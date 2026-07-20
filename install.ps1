@@ -1,4 +1,4 @@
-﻿# Установщик статус-строки Claude Code с лимитами Kimi.
+# Установщик статус-строки Claude Code с лимитами Kimi.
 # Копирует statusline.sh в ~/.claude и прописывает её вызов в settings.json.
 #
 # Установка:  powershell -ExecutionPolicy Bypass -File install.ps1
@@ -48,7 +48,7 @@ if ($Uninstall) {
         Save-Settings $cfg
     }
     Write-Host 'Статус-строка удалена: скрипт и блок statusLine в settings.json убраны.'
-    exit 0
+    return
 }
 
 # --- Проверка зависимостей ---
@@ -59,7 +59,7 @@ foreach ($tool in 'bash', 'jq', 'curl') {
 if ($missing) {
     Write-Host "Не найдены обязательные утилиты: $($missing -join ', ')" -ForegroundColor Red
     Write-Host 'Установите Git for Windows (bash) и jq: winget install jqlang.jq'
-    exit 1
+    return
 }
 
 # --- Установка ---
