@@ -25,6 +25,14 @@ Claude Sonnet ██████░░░░ 68% │ 5h █░░░░░░░
 
 ## Установка
 
+Одной командой в PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.ps1 | iex
+```
+
+Либо из склонированного репозитория:
+
 ```powershell
 git clone https://github.com/Kzamirtay/claude-code-statusline-kimi.git
 cd claude-code-statusline-kimi
@@ -34,7 +42,7 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 Установщик:
 
 - проверяет наличие `bash`, `jq`, `curl`;
-- копирует `statusline.sh` в `~/.claude/`;
+- копирует `statusline.sh` в `~/.claude/` (при запуске через `irm | iex` — скачивает его из репозитория);
 - создаёт резервную копию `settings.json` и прописывает в нём `statusLine.command = bash "$HOME/.claude/statusline.sh"`, не трогая остальные настройки.
 
 ## Как это работает
@@ -47,7 +55,9 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 ## Удаление
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall
+& ([scriptblock]::Create((irm 'https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.ps1'))) -Uninstall
 ```
+
+или из склонированного репозитория: `powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall`
 
 Удаляет `~/.claude/statusline.sh` и блок `statusLine` из `settings.json` (с резервной копией).

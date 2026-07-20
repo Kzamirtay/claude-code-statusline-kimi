@@ -15,6 +15,7 @@ $claudeDir    = Join-Path $HOME '.claude'
 $scriptTarget = Join-Path $claudeDir 'statusline.sh'
 $settingsFile = Join-Path $claudeDir 'settings.json'
 $command      = 'bash "$HOME/.claude/statusline.sh"'
+$repoRaw      = 'https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main'
 
 function Read-Settings {
     if (Test-Path $settingsFile) {
@@ -64,12 +65,14 @@ if ($missing) {
 # --- Установка ---
 New-Item -ItemType Directory -Force $claudeDir | Out-Null
 
-$scriptSource = Join-Path $PSScriptRoot 'statusline.sh'
-if (-not (Test-Path $scriptSource)) {
-    Write-Host "Файл statusline.sh не найден рядом с install.ps1: $scriptSource" -ForegroundColor Red
-    exit 1
+$localScript = if ($PSScriptRoot) { Join-Path $PSScriptRoot 'statusline.sh' } else { $null }
+if ($localScript -and (Test-Path $localScript)) {
+    # Запуск из файла (склонированный репозиторий) — берём скрипт рядом с install.ps1
+    Copy-Item $localScript $scriptTarget -Force
+} else {
+    # Запуск через irm | iex — скачиваем скрипт из репозитория
+    Invoke-WebRequest -Uri "$repoRaw/statusline.sh" -OutFile $scriptTarget -UseBasicParsing
 }
-Copy-Item $scriptSource $scriptTarget -Force
 
 $cfg = Read-Settings
 $backup = Backup-Settings
