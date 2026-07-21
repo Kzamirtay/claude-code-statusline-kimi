@@ -1,6 +1,6 @@
 # claude-code-statusline-kimi
 
-Статус-строка для [Claude Code](https://claude.ai/code) на Windows: название модели, прогресс-бар использованного контекста и лимиты Kimi (5-часовой и недельный) с барами и временем до сброса.
+Статус-строка для [Claude Code](https://claude.ai/code) на Windows и Linux: название модели, прогресс-бар использованного контекста и лимиты Kimi (5-часовой и недельный) с барами и временем до сброса.
 
 ![Статус-строка в терминале](screenshot.png)
 
@@ -15,26 +15,32 @@
 
 ## Требования
 
-- Windows + Claude Code.
-- Git Bash (из Git for Windows) — Claude Code выполняет команду статус-строки через bash.
-- jq — `winget install jqlang.jq`.
-- curl — встроен в Windows 10+.
+- Claude Code.
+- **Linux**: bash, jq (`sudo apt install jq`), curl.
+- **Windows**: Git Bash (из Git for Windows — Claude Code выполняет команду статус-строки через bash), jq (`winget install jqlang.jq`), curl (встроен в Windows 10+).
 - Переменная окружения `ANTHROPIC_API_KEY` с ключом Kimi. Без неё блок лимитов просто не показывается — модель и бар контекста работают в любом случае.
 
 ## Установка
 
-Одной командой в PowerShell:
+**Linux** — одной командой:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.sh | bash
+```
+
+**Windows** — одной командой в PowerShell:
 
 ```powershell
 irm https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.ps1 | iex
 ```
 
-Либо из склонированного репозитория:
+Либо из склонированного репозитория (любая ОС):
 
-```powershell
+```bash
 git clone https://github.com/Kzamirtay/claude-code-statusline-kimi.git
 cd claude-code-statusline-kimi
-powershell -ExecutionPolicy Bypass -File install.ps1
+bash install.sh                        # Linux
+powershell -ExecutionPolicy Bypass -File install.ps1   # Windows
 ```
 
 Установщик:
@@ -52,10 +58,18 @@ powershell -ExecutionPolicy Bypass -File install.ps1
 
 ## Удаление
 
+**Linux:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.sh | bash -s -- --uninstall
+```
+
+**Windows:**
+
 ```powershell
 & ([scriptblock]::Create((irm 'https://raw.githubusercontent.com/Kzamirtay/claude-code-statusline-kimi/main/install.ps1'))) -Uninstall
 ```
 
-или из склонированного репозитория: `powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall`
+Из склонированного репозитория: `bash install.sh --uninstall` / `powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall`
 
 Удаляет `~/.claude/statusline.sh` и блок `statusLine` из `settings.json` (с резервной копией).
